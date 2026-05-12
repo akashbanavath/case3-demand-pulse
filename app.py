@@ -8,41 +8,72 @@ from statsmodels.tsa.holtwinters import ExponentialSmoothing
 import warnings
 warnings.filterwarnings('ignore')
 
-st.set_page_config(page_title="Demand Pulse · Food Delivery Intelligence", page_icon="🔥", layout="wide")
+st.set_page_config(page_title="Demand Pulse · Food Delivery Intelligence", page_icon="📊", layout="wide")
 
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
-*{font-family:'Outfit',sans-serif}
-.block-container{padding:1.2rem 2rem}
-[data-testid="stSidebar"]{background:linear-gradient(180deg,#0d0d1a 0%,#1a1035 100%)}
-[data-testid="stSidebar"] *{color:#c4b5fd!important}
-h1{background:linear-gradient(90deg,#a78bfa,#f472b6,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800!important;font-size:2.4rem!important;letter-spacing:-1px}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+*{font-family:'Inter',sans-serif}
+.block-container{padding:1rem 2rem}
+
+/* Sidebar — dark navy */
+[data-testid="stSidebar"]{background:#0f172a}
+[data-testid="stSidebar"] *{color:#94a3b8!important}
+[data-testid="stSidebar"] h2{color:#f1f5f9!important}
+
+/* Title */
+h1{color:#f1f5f9!important;font-weight:700!important;font-size:2rem!important;letter-spacing:-.5px}
 h2,h3{color:#e2e8f0!important;font-weight:600!important}
-.stTabs [data-baseweb="tab-list"]{gap:8px;background:rgba(15,15,30,0.6);border-radius:12px;padding:6px}
-.stTabs [data-baseweb="tab"]{border-radius:8px;padding:8px 20px;font-weight:500;color:#94a3b8}
-.stTabs [aria-selected="true"]{background:linear-gradient(135deg,#7c3aed,#a855f7)!important;color:#fff!important}
-div[data-testid="stMetric"]{background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(168,85,247,0.10));border:1px solid rgba(139,92,246,0.25);border-radius:16px;padding:16px 14px;backdrop-filter:blur(10px)}
-div[data-testid="stMetric"] label{color:#a78bfa!important;font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;overflow:visible}
-div[data-testid="stMetric"] [data-testid="stMetricValue"]{color:#f1f5f9!important;font-weight:700;font-size:1.6rem}
-.kpi-row{margin-bottom:8px}
-.rec-card{background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(59,130,246,0.08));border:1px solid rgba(124,58,237,0.25);border-radius:20px;padding:28px;margin:12px 0;transition:all .3s ease}
-.rec-card:hover{transform:translateY(-3px);border-color:rgba(139,92,246,0.5);box-shadow:0 8px 30px rgba(124,58,237,0.15)}
-.rec-card h4{color:#c4b5fd!important;margin-bottom:8px;font-size:1.15rem}
-.rec-card p{color:#cbd5e1;line-height:1.7;font-size:.95rem}
-.rec-card b{color:#e2e8f0}
-.impact-badge{display:inline-block;background:linear-gradient(135deg,#059669,#10b981);color:#fff;padding:4px 14px;border-radius:20px;font-weight:600;font-size:.85rem;margin-top:8px;margin-right:6px}
-.exec-box{background:linear-gradient(135deg,rgba(251,146,60,0.1),rgba(244,63,94,0.08));border:1px solid rgba(251,146,60,0.25);border-radius:20px;padding:28px;margin:16px 0}
-.exec-box h4{color:#fb923c!important}
-.exec-box p,.exec-box li{color:#cbd5e1;line-height:1.8}
-.insight-callout{background:rgba(56,189,248,0.08);border-left:4px solid #38bdf8;border-radius:0 12px 12px 0;padding:14px 20px;margin:12px 0;color:#cbd5e1;font-size:.95rem}
+h5{color:#94a3b8!important}
+
+/* Tabs — clean, corporate */
+.stTabs [data-baseweb="tab-list"]{gap:4px;background:#1e293b;border-radius:10px;padding:4px;border:1px solid #334155}
+.stTabs [data-baseweb="tab"]{border-radius:8px;padding:8px 18px;font-weight:500;color:#94a3b8;font-size:.9rem}
+.stTabs [aria-selected="true"]{background:#0f172a!important;color:#f1f5f9!important;border:1px solid #334155}
+
+/* KPI Cards — glass on dark */
+div[data-testid="stMetric"]{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:16px 14px}
+div[data-testid="stMetric"] label{color:#64748b!important;font-weight:500;font-size:.72rem;text-transform:uppercase;letter-spacing:.8px;white-space:nowrap;overflow:visible}
+div[data-testid="stMetric"] [data-testid="stMetricValue"]{color:#f8fafc!important;font-weight:700;font-size:1.5rem}
+
+/* Recommendation cards — teal accent */
+.rec-card{background:#1e293b;border:1px solid #334155;border-left:4px solid #0d9488;border-radius:12px;padding:24px;margin:12px 0;transition:all .25s ease}
+.rec-card:hover{border-color:#0d9488;box-shadow:0 4px 20px rgba(13,148,136,0.1);transform:translateY(-2px)}
+.rec-card h4{color:#2dd4bf!important;margin-bottom:6px;font-size:1.05rem;font-weight:600}
+.rec-card p{color:#cbd5e1;line-height:1.65;font-size:.92rem}
+.rec-card b{color:#f1f5f9}
+
+/* Impact badges */
+.impact-badge{display:inline-block;background:#0d9488;color:#fff;padding:3px 12px;border-radius:6px;font-weight:600;font-size:.8rem;margin-top:6px;margin-right:6px}
+
+/* Exec summary boxes */
+.exec-box{background:#1e293b;border:1px solid #334155;border-left:4px solid #f59e0b;border-radius:12px;padding:24px;margin:14px 0}
+.exec-box h4{color:#fbbf24!important;font-weight:600}
+.exec-box p,.exec-box li{color:#cbd5e1;line-height:1.7;font-size:.92rem}
+
+/* Insight callouts — blue accent */
+.insight-callout{background:rgba(14,165,233,0.06);border-left:3px solid #0ea5e9;border-radius:0 8px 8px 0;padding:12px 18px;margin:10px 0;color:#cbd5e1;font-size:.9rem}
+.insight-callout b{color:#38bdf8}
+
+/* Dividers */
+hr{border-color:#1e293b!important}
 </style>
 """, unsafe_allow_html=True)
 
-DARK_LAYOUT = dict(template='plotly_dark', paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
-                   font=dict(family='Outfit', color='#cbd5e1'), margin=dict(l=40,r=20,t=50,b=40),
-                   legend=dict(bgcolor='rgba(0,0,0,0)'))
-COLORS = ['#8b5cf6','#a855f7','#c084fc','#d946ef','#f472b6','#fb923c','#38bdf8','#34d399','#fbbf24']
+# Professional chart styling — clean, minimal, corporate
+CHART_LAYOUT = dict(
+    template='plotly_dark',
+    paper_bgcolor='rgba(0,0,0,0)',
+    plot_bgcolor='rgba(0,0,0,0)',
+    font=dict(family='Inter', color='#94a3b8', size=12),
+    margin=dict(l=40, r=20, t=50, b=40),
+    legend=dict(bgcolor='rgba(0,0,0,0)', font=dict(size=11)),
+    xaxis=dict(gridcolor='rgba(51,65,85,0.4)', zerolinecolor='rgba(51,65,85,0.4)'),
+    yaxis=dict(gridcolor='rgba(51,65,85,0.4)', zerolinecolor='rgba(51,65,85,0.4)'),
+    title_font=dict(size=15, color='#e2e8f0'),
+)
+# Professional palette: teal, blue, amber, rose, indigo, emerald, sky, violet, orange
+COLORS = ['#0d9488','#3b82f6','#f59e0b','#f43f5e','#6366f1','#10b981','#0ea5e9','#8b5cf6','#fb923c']
 
 @st.cache_data
 def load_data():
@@ -62,8 +93,8 @@ def load_data():
 df = load_data()
 
 # ── Sidebar ──
-st.sidebar.markdown("## 🔥 Demand Pulse")
-st.sidebar.markdown("*Rider-incentive intelligence*")
+st.sidebar.markdown("## 📊 Demand Pulse")
+st.sidebar.markdown("*Rider-incentive intelligence platform*")
 st.sidebar.markdown("---")
 selected_cities = st.sidebar.multiselect("🏙️ Cities", sorted(df['city'].unique()), default=sorted(df['city'].unique()))
 selected_cuisines = st.sidebar.multiselect("🍽️ Cuisines", sorted(df['cuisine'].unique()), default=sorted(df['cuisine'].unique()))
@@ -76,8 +107,9 @@ if len(date_range) == 2:
     filt = filt[(filt['date'] >= date_range[0]) & (filt['date'] <= date_range[1])]
 
 # ── Header ──
-st.title("🔥 Food Delivery Demand Pulse")
+st.title("📊 Food Delivery Demand Pulse")
 st.markdown("##### Transforming 50K orders into actionable rider-incentive intelligence for the Ops Head")
+st.markdown("")
 
 # ── KPIs ── (short labels to prevent truncation)
 k1,k2,k3,k4,k5,k6 = st.columns(6)
@@ -97,9 +129,9 @@ with tab1:
     with c1:
         hourly = filt.groupby('hour').agg(orders=('order_id','count'),avg_val=('order_value','mean')).reset_index()
         fig = make_subplots(specs=[[{"secondary_y":True}]])
-        fig.add_trace(go.Bar(x=hourly['hour'],y=hourly['orders'],name='Orders',marker_color='#8b5cf6',opacity=0.8), secondary_y=False)
+        fig.add_trace(go.Bar(x=hourly['hour'],y=hourly['orders'],name='Orders',marker_color='#0d9488',opacity=0.85), secondary_y=False)
         fig.add_trace(go.Scatter(x=hourly['hour'],y=hourly['avg_val'],name='Avg ₹',line=dict(color='#fb923c',width=3),mode='lines+markers'), secondary_y=True)
-        fig.update_layout(**DARK_LAYOUT,title='📈 Hourly Demand & Avg Order Value',xaxis_title='Hour')
+        fig.update_layout(**CHART_LAYOUT,title='📈 Hourly Demand & Avg Order Value',xaxis_title='Hour')
         fig.update_yaxes(title_text="Orders",secondary_y=False); fig.update_yaxes(title_text="Avg ₹",secondary_y=True)
         st.plotly_chart(fig, use_container_width=True)
 
@@ -110,14 +142,14 @@ with tab1:
         daily = daily.sort_values('day_of_week')
         fig = go.Figure()
         fig.add_trace(go.Bar(x=daily['day_of_week'],y=daily['orders'],name='Orders',marker=dict(color=daily['orders'],colorscale='Viridis')))
-        fig.update_layout(**DARK_LAYOUT,title='📅 Day-of-Week Volume')
+        fig.update_layout(**CHART_LAYOUT,title='📅 Day-of-Week Volume')
         st.plotly_chart(fig, use_container_width=True)
 
     # Heatmap
     heatmap = filt.groupby(['day_of_week','hour']).size().unstack(fill_value=0).reindex(day_order)
     fig = px.imshow(heatmap, aspect='auto', color_continuous_scale='Magma',
                     labels=dict(x='Hour',y='Day',color='Orders'), title='🔥 Demand Heatmap — Where the Real Peaks Are')
-    fig.update_layout(**DARK_LAYOUT)
+    fig.update_layout(**CHART_LAYOUT)
     st.plotly_chart(fig, use_container_width=True)
 
     # Insight callout after heatmap
@@ -133,16 +165,16 @@ with tab1:
                                                avg_del=('delivery_time_min','mean')).reset_index().sort_values('orders',ascending=True)
         fig = px.bar(cuisine, y='cuisine', x='orders', orientation='h', color='avg_val',
                      color_continuous_scale='Turbo', title='🍽️ Cuisine Mix (colored by avg ₹)')
-        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(**CHART_LAYOUT)
         st.plotly_chart(fig, use_container_width=True)
 
     with c4:
         surge_hour = filt.groupby('hour').agg(surge=('surge_applied','mean'),orders=('order_id','count')).reset_index()
         fig = make_subplots(specs=[[{"secondary_y":True}]])
-        fig.add_trace(go.Bar(x=surge_hour['hour'],y=surge_hour['orders'],name='Orders',marker_color='rgba(139,92,246,0.3)'), secondary_y=False)
+        fig.add_trace(go.Bar(x=surge_hour['hour'],y=surge_hour['orders'],name='Orders',marker_color='rgba(13,148,136,0.25)'), secondary_y=False)
         fig.add_trace(go.Scatter(x=surge_hour['hour'],y=surge_hour['surge'],name='Surge %',
                                   line=dict(color='#ef4444',width=3),mode='lines+markers'), secondary_y=True)
-        fig.update_layout(**DARK_LAYOUT,title='⚡ Surge Rate vs Demand — The Mismatch')
+        fig.update_layout(**CHART_LAYOUT,title='⚡ Surge Rate vs Demand — The Mismatch')
         fig.update_yaxes(title_text="Orders",secondary_y=False); fig.update_yaxes(title_text="Surge %",tickformat='.0%',secondary_y=True)
         st.plotly_chart(fig, use_container_width=True)
 
@@ -162,20 +194,20 @@ with tab2:
                                                rev=('revenue','sum')).reset_index().sort_values('orders',ascending=False)
         fig = px.bar(city_stats, x='city', y='orders', color='surge', color_continuous_scale='RdYlGn_r',
                      title='🏙️ Orders by City (colored by surge rate)')
-        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(**CHART_LAYOUT)
         st.plotly_chart(fig, use_container_width=True)
 
     with c2:
         fig = px.scatter(city_stats, x='avg_del', y='avg_val', size='orders', color='city',
                          color_discrete_sequence=COLORS, size_max=55, title='⏱️ Delivery Time vs Order Value')
-        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(**CHART_LAYOUT)
         st.plotly_chart(fig, use_container_width=True)
 
     # City hourly patterns
     city_hourly = filt.groupby(['city','hour']).size().reset_index(name='orders')
     fig = px.line(city_hourly, x='hour', y='orders', color='city', color_discrete_sequence=COLORS,
                   title='🕐 Hourly Patterns by City — Each City Has Its Own Rhythm')
-    fig.update_layout(**DARK_LAYOUT)
+    fig.update_layout(**CHART_LAYOUT)
     st.plotly_chart(fig, use_container_width=True)
 
     # Surge mismatch analysis
@@ -184,23 +216,23 @@ with tab2:
         surge_city = filt.groupby(['city','hour'])['surge_applied'].mean().reset_index()
         fig = px.line(surge_city, x='hour', y='surge_applied', color='city', color_discrete_sequence=COLORS,
                       title='⚡ Surge Rate by City & Hour')
-        fig.update_layout(**DARK_LAYOUT, yaxis_tickformat='.0%')
+        fig.update_layout(**CHART_LAYOUT, yaxis_tickformat='.0%')
         st.plotly_chart(fig, use_container_width=True)
 
     with c4:
         wkend = filt.groupby(['city','is_weekend']).agg(orders=('order_id','count')).reset_index()
         wkend['type'] = wkend['is_weekend'].map({True:'Weekend',False:'Weekday'})
         fig = px.bar(wkend, x='city', y='orders', color='type', barmode='group',
-                     color_discrete_map={'Weekday':'#8b5cf6','Weekend':'#f472b6'},
+                     color_discrete_map={'Weekday':'#0d9488','Weekend':'#f59e0b'},
                      title='📊 Weekday vs Weekend Volume by City')
-        fig.update_layout(**DARK_LAYOUT)
+        fig.update_layout(**CHART_LAYOUT)
         st.plotly_chart(fig, use_container_width=True)
 
     # City-cuisine matrix
     city_cuisine = filt.groupby(['city','cuisine']).size().reset_index(name='orders')
     fig = px.treemap(city_cuisine, path=['city','cuisine'], values='orders',
                      color='orders', color_continuous_scale='Viridis', title='🗺️ City × Cuisine Breakdown')
-    fig.update_layout(**DARK_LAYOUT)
+    fig.update_layout(**CHART_LAYOUT)
     st.plotly_chart(fig, use_container_width=True)
 
 # ═══════════ TAB 3: FORECAST ═══════════
@@ -225,14 +257,14 @@ with tab3:
                 ci = 1.96 * residuals.std()
                 fig = go.Figure()
                 fig.add_trace(go.Scatter(x=city_d.index, y=city_d['orders'], name='Historical',
-                                          line=dict(color='#8b5cf6',width=2), fill='tozeroy', fillcolor='rgba(139,92,246,0.1)'))
+                                          line=dict(color='#0d9488',width=2), fill='tozeroy', fillcolor='rgba(13,148,136,0.08)'))
                 fig.add_trace(go.Scatter(x=fc.index, y=fc.values, name='Forecast',
-                                          line=dict(color='#fb923c',width=3,dash='dot'), mode='lines+markers'))
+                                          line=dict(color='#f59e0b',width=3,dash='dot'), mode='lines+markers'))
                 fig.add_trace(go.Scatter(x=fc.index, y=fc.values+ci, name='Upper 95% CI',
                                           line=dict(width=0), showlegend=False))
                 fig.add_trace(go.Scatter(x=fc.index, y=np.maximum(fc.values-ci,0), name='Lower 95% CI',
                                           line=dict(width=0), fill='tonexty', fillcolor='rgba(251,146,60,0.15)', showlegend=False))
-                fig.update_layout(**DARK_LAYOUT, title=f'📈 7-Day Forecast — {forecast_city}')
+                fig.update_layout(**CHART_LAYOUT, title=f'📈 7-Day Forecast — {forecast_city}')
                 st.plotly_chart(fig, use_container_width=True)
 
                 fc_df = pd.DataFrame({'Date':fc.index.strftime('%Y-%m-%d'),'Predicted Orders':fc.values.round(0).astype(int),
@@ -255,7 +287,7 @@ with tab3:
                     fig.add_trace(go.Scatter(x=f.index, y=f.values, name=city, line=dict(color=COLORS[i%len(COLORS)],width=2),
                                               mode='lines+markers'))
                 except: pass
-            fig.update_layout(**DARK_LAYOUT, title='🌐 7-Day Forecast Comparison — All Cities')
+            fig.update_layout(**CHART_LAYOUT, title='🌐 7-Day Forecast Comparison — All Cities')
             st.plotly_chart(fig, use_container_width=True)
 
 # ═══════════ TAB 4: RECOMMENDATIONS ═══════════
@@ -379,8 +411,8 @@ with tab5:
 # ── Footer ──
 st.markdown("---")
 st.markdown("""
-<div style="text-align:center;color:#64748b;padding:10px">
-<p>Built for the Ops Head · Case 3: Food Delivery Demand Pulse · 50K orders · 7 cities · 90 days</p>
-<p style="font-size:.8rem">Stack: Python · Streamlit · Plotly · Holt-Winters · Pandas</p>
+<div style="text-align:center;color:#475569;padding:10px">
+<p style="font-size:.85rem">Built for the Ops Head · Case 3: Food Delivery Demand Pulse · 50K orders · 7 cities · 90 days</p>
+<p style="font-size:.75rem;color:#334155">Stack: Python · Streamlit · Plotly · Holt-Winters · Pandas</p>
 </div>
 """, unsafe_allow_html=True)
