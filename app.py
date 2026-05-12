@@ -14,7 +14,7 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 *{font-family:'Outfit',sans-serif}
-.block-container{padding:1.5rem 2rem}
+.block-container{padding:1.2rem 2rem}
 [data-testid="stSidebar"]{background:linear-gradient(180deg,#0d0d1a 0%,#1a1035 100%)}
 [data-testid="stSidebar"] *{color:#c4b5fd!important}
 h1{background:linear-gradient(90deg,#a78bfa,#f472b6,#fb923c);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800!important;font-size:2.4rem!important;letter-spacing:-1px}
@@ -22,18 +22,20 @@ h2,h3{color:#e2e8f0!important;font-weight:600!important}
 .stTabs [data-baseweb="tab-list"]{gap:8px;background:rgba(15,15,30,0.6);border-radius:12px;padding:6px}
 .stTabs [data-baseweb="tab"]{border-radius:8px;padding:8px 20px;font-weight:500;color:#94a3b8}
 .stTabs [aria-selected="true"]{background:linear-gradient(135deg,#7c3aed,#a855f7)!important;color:#fff!important}
-div[data-testid="stMetric"]{background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(168,85,247,0.08));border:1px solid rgba(139,92,246,0.2);border-radius:16px;padding:18px 20px;backdrop-filter:blur(10px)}
-div[data-testid="stMetric"] label{color:#a78bfa!important;font-weight:500;font-size:.85rem;text-transform:uppercase;letter-spacing:1px}
-div[data-testid="stMetric"] [data-testid="stMetricValue"]{color:#f1f5f9!important;font-weight:700;font-size:1.8rem}
-.rec-card{background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(59,130,246,0.08));border:1px solid rgba(124,58,237,0.25);border-radius:20px;padding:28px;margin:12px 0;transition:transform .2s}
-.rec-card:hover{transform:translateY(-2px)}
+div[data-testid="stMetric"]{background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(168,85,247,0.10));border:1px solid rgba(139,92,246,0.25);border-radius:16px;padding:16px 14px;backdrop-filter:blur(10px)}
+div[data-testid="stMetric"] label{color:#a78bfa!important;font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;overflow:visible}
+div[data-testid="stMetric"] [data-testid="stMetricValue"]{color:#f1f5f9!important;font-weight:700;font-size:1.6rem}
+.kpi-row{margin-bottom:8px}
+.rec-card{background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(59,130,246,0.08));border:1px solid rgba(124,58,237,0.25);border-radius:20px;padding:28px;margin:12px 0;transition:all .3s ease}
+.rec-card:hover{transform:translateY(-3px);border-color:rgba(139,92,246,0.5);box-shadow:0 8px 30px rgba(124,58,237,0.15)}
 .rec-card h4{color:#c4b5fd!important;margin-bottom:8px;font-size:1.15rem}
 .rec-card p{color:#cbd5e1;line-height:1.7;font-size:.95rem}
 .rec-card b{color:#e2e8f0}
-.impact-badge{display:inline-block;background:linear-gradient(135deg,#059669,#10b981);color:#fff;padding:4px 14px;border-radius:20px;font-weight:600;font-size:.85rem;margin-top:8px}
+.impact-badge{display:inline-block;background:linear-gradient(135deg,#059669,#10b981);color:#fff;padding:4px 14px;border-radius:20px;font-weight:600;font-size:.85rem;margin-top:8px;margin-right:6px}
 .exec-box{background:linear-gradient(135deg,rgba(251,146,60,0.1),rgba(244,63,94,0.08));border:1px solid rgba(251,146,60,0.25);border-radius:20px;padding:28px;margin:16px 0}
 .exec-box h4{color:#fb923c!important}
 .exec-box p,.exec-box li{color:#cbd5e1;line-height:1.8}
+.insight-callout{background:rgba(56,189,248,0.08);border-left:4px solid #38bdf8;border-radius:0 12px 12px 0;padding:14px 20px;margin:12px 0;color:#cbd5e1;font-size:.95rem}
 </style>
 """, unsafe_allow_html=True)
 
@@ -77,14 +79,14 @@ if len(date_range) == 2:
 st.title("🔥 Food Delivery Demand Pulse")
 st.markdown("##### Transforming 50K orders into actionable rider-incentive intelligence for the Ops Head")
 
-# ── KPIs ──
+# ── KPIs ── (short labels to prevent truncation)
 k1,k2,k3,k4,k5,k6 = st.columns(6)
-k1.metric("Total Orders", f"{len(filt):,}")
+k1.metric("Orders", f"{len(filt):,}")
 k2.metric("Revenue", f"₹{filt['revenue'].sum()/1e5:.1f}L")
-k3.metric("Avg Order ₹", f"₹{filt['order_value'].mean():.0f}")
-k4.metric("Avg Delivery", f"{filt['delivery_time_min'].mean():.0f} min")
-k5.metric("Surge Rate", f"{filt['surge_applied'].mean():.1%}")
-k6.metric("Orders/Day", f"{len(filt)/max(filt['date'].nunique(),1):.0f}")
+k3.metric("Avg ₹", f"₹{filt['order_value'].mean():.0f}")
+k4.metric("Delivery", f"{filt['delivery_time_min'].mean():.0f} min")
+k5.metric("Surge %", f"{filt['surge_applied'].mean():.1%}")
+k6.metric("Per Day", f"{len(filt)/max(filt['date'].nunique(),1):.0f}")
 
 # ── Tabs ──
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Demand Patterns","🏙️ City Deep-Dive","🔮 Forecast","💡 Recommendations","📋 Exec Summary"])
@@ -118,6 +120,13 @@ with tab1:
     fig.update_layout(**DARK_LAYOUT)
     st.plotly_chart(fig, use_container_width=True)
 
+    # Insight callout after heatmap
+    peak_hour = filt.groupby('hour').size().idxmax()
+    peak_day = filt.groupby('day_of_week').size().idxmax()
+    st.markdown(f'<div class="insight-callout">💡 <b>Key insight:</b> Peak demand hits at <b>{peak_hour}:00</b> hours on <b>{peak_day}s</b>. '
+                f'The heatmap reveals two clear demand bands — lunch (12–14h) and dinner (19–22h) — with a quiet afternoon gap where surge is often still active.</div>',
+                unsafe_allow_html=True)
+
     c3,c4 = st.columns(2)
     with c3:
         cuisine = filt.groupby('cuisine').agg(orders=('order_id','count'),avg_val=('order_value','mean'),
@@ -136,6 +145,13 @@ with tab1:
         fig.update_layout(**DARK_LAYOUT,title='⚡ Surge Rate vs Demand — The Mismatch')
         fig.update_yaxes(title_text="Orders",secondary_y=False); fig.update_yaxes(title_text="Surge %",tickformat='.0%',secondary_y=True)
         st.plotly_chart(fig, use_container_width=True)
+
+    # Insight after surge chart
+    off_pk = filt[(filt['surge_applied']==1) & (~filt['hour'].isin([12,13,14,19,20,21,22]))].shape[0]
+    total_sg = max(filt[filt['surge_applied']==1].shape[0], 1)
+    st.markdown(f'<div class="insight-callout">⚡ <b>Surge waste:</b> {off_pk/total_sg:.0%} of all surged orders ({off_pk:,} orders) '
+                f'fall <b>outside</b> the real peak windows. This is the single biggest cost-saving opportunity.</div>',
+                unsafe_allow_html=True)
 
 # ═══════════ TAB 2: CITY DEEP-DIVE ═══════════
 with tab2:
