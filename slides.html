@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280,height=720">
+<title>Case 3 — Food Delivery Demand Pulse</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0f172a;color:#f1f5f9;overflow:hidden}
+.slide{width:1280px;height:720px;padding:60px 80px;display:none;position:relative;page-break-after:always}
+.slide.active{display:flex;flex-direction:column;justify-content:center}
+.slide-num{position:absolute;bottom:30px;right:50px;color:#475569;font-size:14px;font-weight:500}
+.accent{color:#0d9488}
+.accent2{color:#f59e0b}
+h1{font-size:48px;font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:16px}
+h2{font-size:36px;font-weight:700;letter-spacing:-.5px;margin-bottom:24px}
+h3{font-size:20px;font-weight:600;color:#94a3b8;margin-bottom:32px;text-transform:uppercase;letter-spacing:2px}
+p{font-size:22px;color:#cbd5e1;line-height:1.6;max-width:900px}
+.stat-row{display:flex;gap:40px;margin:30px 0}
+.stat{text-align:center}
+.stat .num{font-size:56px;font-weight:800;color:#0d9488}
+.stat .label{font-size:16px;color:#64748b;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+ul{list-style:none;padding:0}
+ul li{font-size:20px;color:#cbd5e1;padding:10px 0;border-bottom:1px solid #1e293b;display:flex;align-items:center}
+ul li::before{content:'';width:8px;height:8px;background:#0d9488;border-radius:50%;margin-right:16px;flex-shrink:0}
+.tag{display:inline-block;background:#1e293b;border:1px solid #334155;border-radius:6px;padding:4px 14px;font-size:14px;color:#94a3b8;margin-right:8px;margin-bottom:6px}
+.tag.teal{border-color:#0d9488;color:#2dd4bf}
+.card-row{display:flex;gap:24px;margin:24px 0}
+.card{flex:1;background:#1e293b;border:1px solid #334155;border-radius:16px;padding:28px;border-top:3px solid #0d9488}
+.card h4{font-size:18px;font-weight:700;color:#2dd4bf;margin-bottom:8px}
+.card p{font-size:15px;color:#94a3b8;line-height:1.5}
+.card .impact{font-size:22px;font-weight:700;color:#f1f5f9;margin-top:12px}
+.outcome-row{display:flex;gap:30px;margin:20px 0}
+.outcome{flex:1;background:#1e293b;border-radius:12px;padding:24px;text-align:center}
+.outcome .val{font-size:36px;font-weight:800;color:#0d9488}
+.outcome .desc{font-size:14px;color:#64748b;margin-top:6px}
+.next-item{display:flex;align-items:flex-start;gap:16px;padding:14px 0;border-bottom:1px solid #1e293b}
+.next-num{font-size:28px;font-weight:800;color:#0d9488;width:36px;flex-shrink:0}
+.next-text h4{font-size:18px;font-weight:600;color:#f1f5f9;margin-bottom:4px}
+.next-text p{font-size:15px;color:#94a3b8}
+.controls{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:12px;z-index:100}
+.controls button{background:#1e293b;color:#94a3b8;border:1px solid #334155;border-radius:8px;padding:8px 20px;font-family:'Inter';font-size:14px;cursor:pointer}
+.controls button:hover{background:#334155;color:#f1f5f9}
+.brand{position:absolute;top:30px;right:50px;font-size:13px;color:#334155;font-weight:600;letter-spacing:1px}
+@media print{.slide{display:flex!important;flex-direction:column;justify-content:center;break-after:page}.controls{display:none}}
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: THE PROBLEM -->
+<div class="slide active" id="s1">
+<div class="brand">CASE 3</div>
+<h3>The Problem</h3>
+<h1>Our riders cost us <span class="accent">more</span> when<br>demand doesn't need them.</h1>
+<p>The Ops Head suspects we're overpaying surge incentives during hours that aren't actually peak — but has no data to prove it or know where to cut.</p>
+<div class="stat-row">
+<div class="stat"><div class="num">50K</div><div class="label">Orders analyzed</div></div>
+<div class="stat"><div class="num">7</div><div class="label">Cities</div></div>
+<div class="stat"><div class="num">~55%</div><div class="label">Surge wasted off-peak</div></div>
+</div>
+<div class="slide-num">1 / 5</div>
+</div>
+
+<!-- SLIDE 2: YOUR APPROACH -->
+<div class="slide" id="s2">
+<div class="brand">CASE 3</div>
+<h3>The Approach</h3>
+<h2>Stack & Key Trade-offs</h2>
+<div style="display:flex;gap:40px">
+<div style="flex:1">
+<div style="margin-bottom:20px">
+<span class="tag teal">Python</span><span class="tag teal">Streamlit</span><span class="tag teal">Plotly</span><span class="tag teal">Pandas</span><span class="tag teal">Holt-Winters</span>
+</div>
+<ul>
+<li>Holt-Winters over Prophet — fewer deps, handles weekly seasonality, honest for 7-day horizon</li>
+<li>Interactive Plotly over static charts — Ops Head can filter and explore independently</li>
+<li>Per-city analysis, not aggregate — aggregating IS the current problem</li>
+<li>95% confidence intervals on forecasts — a point forecast without CI is a guess</li>
+<li>Data-driven recommendations — numbers computed from actual dataset, not hardcoded</li>
+</ul>
+</div>
+</div>
+<div class="slide-num">2 / 5</div>
+</div>
+
+<!-- SLIDE 3: THE BUILD -->
+<div class="slide" id="s3">
+<div class="brand">CASE 3</div>
+<h3>The Build</h3>
+<h2>5-Tab Interactive Dashboard</h2>
+<div class="card-row">
+<div class="card"><h4>Demand Patterns</h4><p>Hourly/daily demand, heatmap, cuisine mix, surge vs demand mismatch chart</p></div>
+<div class="card"><h4>City Deep-Dive</h4><p>Per-city hourly curves, weekday vs weekend, treemap breakdown</p></div>
+<div class="card"><h4>7-Day Forecast</h4><p>Holt-Winters with 95% CI, all-cities comparison mode</p></div>
+</div>
+<div class="card-row">
+<div class="card"><h4>Recommendations</h4><p>3 data-backed policies with quantified impact + A/B test design</p></div>
+<div class="card"><h4>Exec Summary</h4><p>One-page brief for the Ops Head with action table</p></div>
+</div>
+<p style="font-size:15px;color:#475569;margin-top:16px">Non-obvious choice: Insight callouts between charts turn the dashboard into a narrative, not just a chart collection.</p>
+<div class="slide-num">3 / 5</div>
+</div>
+
+<!-- SLIDE 4: THE OUTCOME -->
+<div class="slide" id="s4">
+<div class="brand">CASE 3</div>
+<h3>The Outcome</h3>
+<h2>3 Actionable Policies, Quantified</h2>
+<div class="card-row">
+<div class="card" style="border-top-color:#ef4444">
+<h4 style="color:#fca5a5">1. Narrow Surge Windows</h4>
+<p>~55% of surge applied outside real peaks</p>
+<div class="impact">Saves Rs 2.5-4L/month</div>
+</div>
+<div class="card" style="border-top-color:#f59e0b">
+<h4 style="color:#fbbf24">2. Weekend Incentive Tiers</h4>
+<p>Weekends 10-15% busier but same flat surge</p>
+<div class="impact">8-12% faster weekends</div>
+</div>
+<div class="card" style="border-top-color:#3b82f6">
+<h4 style="color:#93c5fd">3. Tier-2 Pre-Positioning</h4>
+<p>Kolkata/Pune spike in narrow 2-hr windows</p>
+<div class="impact">5-10% faster Tier-2</div>
+</div>
+</div>
+<div class="outcome-row">
+<div class="outcome"><div class="val">50K</div><div class="desc">Orders analyzed</div></div>
+<div class="outcome"><div class="val">7 cities</div><div class="desc">Each with unique pattern</div></div>
+<div class="outcome"><div class="val">7 days</div><div class="desc">Forecast horizon with 95% CI</div></div>
+<div class="outcome"><div class="val">90 days</div><div class="desc">Data coverage</div></div>
+</div>
+<div class="slide-num">4 / 5</div>
+</div>
+
+<!-- SLIDE 5: WHAT'S NEXT -->
+<div class="slide" id="s5">
+<div class="brand">CASE 3</div>
+<h3>What's Next</h3>
+<h2>With Another Week, I Would Build:</h2>
+<div class="next-item"><div class="next-num">1</div><div class="next-text"><h4>Weather + Holiday Augmentation</h4><p>Integrate OpenWeather API and public holiday calendar — rainy days and festivals shift demand patterns significantly.</p></div></div>
+<div class="next-item"><div class="next-num">2</div><div class="next-text"><h4>Prophet + ARIMA Ensemble</h4><p>Compare 3 forecast models, auto-select best per city. Report MAE/MAPE on rolling holdout.</p></div></div>
+<div class="next-item"><div class="next-num">3</div><div class="next-text"><h4>A/B Test Framework</h4><p>Full power analysis for Rec 1 with auto-kill guardrails. Measure delivery time, surge payouts, rider acceptance.</p></div></div>
+<div class="next-item"><div class="next-num">4</div><div class="next-text"><h4>Real-Time Streaming</h4><p>Kafka ingestion with live demand monitoring and automated daily forecast refresh with drift alerts.</p></div></div>
+<p style="margin-top:20px;font-size:16px;color:#475569">Honest limitation: Model uses synthetic data. With real data, expect better forecast accuracy and more nuanced city-level patterns.</p>
+<div class="slide-num">5 / 5</div>
+</div>
+
+<div class="controls">
+<button onclick="prev()">Previous</button>
+<button onclick="next()">Next</button>
+<button onclick="window.print()">Export PDF</button>
+</div>
+<script>
+let cur=0;const slides=document.querySelectorAll('.slide');
+function show(n){slides.forEach(s=>s.classList.remove('active'));slides[n].classList.add('active')}
+function next(){if(cur<slides.length-1){cur++;show(cur)}}
+function prev(){if(cur>0){cur--;show(cur)}}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight')next();if(e.key==='ArrowLeft')prev()});
+</script>
+</body>
+</html>

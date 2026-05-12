@@ -93,12 +93,12 @@ def load_data():
 df = load_data()
 
 # ── Sidebar ──
-st.sidebar.markdown("## 📊 Demand Pulse")
+st.sidebar.markdown("##  Demand Pulse")
 st.sidebar.markdown("*Rider-incentive intelligence platform*")
 st.sidebar.markdown("---")
-selected_cities = st.sidebar.multiselect("🏙️ Cities", sorted(df['city'].unique()), default=sorted(df['city'].unique()))
-selected_cuisines = st.sidebar.multiselect("🍽️ Cuisines", sorted(df['cuisine'].unique()), default=sorted(df['cuisine'].unique()))
-date_range = st.sidebar.date_input("📅 Date Range", [df['timestamp'].min().date(), df['timestamp'].max().date()])
+selected_cities = st.sidebar.multiselect(" Cities", sorted(df['city'].unique()), default=sorted(df['city'].unique()))
+selected_cuisines = st.sidebar.multiselect(" Cuisines", sorted(df['cuisine'].unique()), default=sorted(df['cuisine'].unique()))
+date_range = st.sidebar.date_input(" Date Range", [df['timestamp'].min().date(), df['timestamp'].max().date()])
 st.sidebar.markdown("---")
 st.sidebar.caption("50K orders · 7 cities · 90 days")
 
@@ -107,7 +107,7 @@ if len(date_range) == 2:
     filt = filt[(filt['date'] >= date_range[0]) & (filt['date'] <= date_range[1])]
 
 # ── Header ──
-st.title("📊 Food Delivery Demand Pulse")
+st.title(" Food Delivery Demand Pulse")
 st.markdown("##### Transforming 50K orders into actionable rider-incentive intelligence for the Ops Head")
 st.markdown("")
 
@@ -121,7 +121,7 @@ k5.metric("Surge %", f"{filt['surge_applied'].mean():.1%}")
 k6.metric("Per Day", f"{len(filt)/max(filt['date'].nunique(),1):.0f}")
 
 # ── Tabs ──
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["📊 Demand Patterns","🏙️ City Deep-Dive","🔮 Forecast","💡 Recommendations","📋 Exec Summary"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs([" Demand Patterns"," City Deep-Dive","🔮 Forecast","💡 Recommendations","📋 Exec Summary"])
 
 # ═══════════ TAB 1: DEMAND PATTERNS ═══════════
 with tab1:
@@ -131,7 +131,7 @@ with tab1:
         fig = make_subplots(specs=[[{"secondary_y":True}]])
         fig.add_trace(go.Bar(x=hourly['hour'],y=hourly['orders'],name='Orders',marker_color='#0d9488',opacity=0.85), secondary_y=False)
         fig.add_trace(go.Scatter(x=hourly['hour'],y=hourly['avg_val'],name='Avg ₹',line=dict(color='#fb923c',width=3),mode='lines+markers'), secondary_y=True)
-        fig.update_layout(**CHART_LAYOUT,title='📈 Hourly Demand & Avg Order Value',xaxis_title='Hour')
+        fig.update_layout(**CHART_LAYOUT,title=' Hourly Demand & Avg Order Value',xaxis_title='Hour')
         fig.update_yaxes(title_text="Orders",secondary_y=False); fig.update_yaxes(title_text="Avg ₹",secondary_y=True)
         st.plotly_chart(fig, use_container_width=True)
 
@@ -142,7 +142,7 @@ with tab1:
         daily = daily.sort_values('day_of_week')
         fig = go.Figure()
         fig.add_trace(go.Bar(x=daily['day_of_week'],y=daily['orders'],name='Orders',marker=dict(color=daily['orders'],colorscale='Viridis')))
-        fig.update_layout(**CHART_LAYOUT,title='📅 Day-of-Week Volume')
+        fig.update_layout(**CHART_LAYOUT,title=' Day-of-Week Volume')
         st.plotly_chart(fig, use_container_width=True)
 
     # Heatmap
@@ -164,7 +164,7 @@ with tab1:
         cuisine = filt.groupby('cuisine').agg(orders=('order_id','count'),avg_val=('order_value','mean'),
                                                avg_del=('delivery_time_min','mean')).reset_index().sort_values('orders',ascending=True)
         fig = px.bar(cuisine, y='cuisine', x='orders', orientation='h', color='avg_val',
-                     color_continuous_scale='Turbo', title='🍽️ Cuisine Mix (colored by avg ₹)')
+                     color_continuous_scale='Turbo', title=' Cuisine Mix (colored by avg ₹)')
         fig.update_layout(**CHART_LAYOUT)
         st.plotly_chart(fig, use_container_width=True)
 
@@ -193,20 +193,20 @@ with tab2:
                                                surge=('surge_applied','mean'),avg_del=('delivery_time_min','mean'),
                                                rev=('revenue','sum')).reset_index().sort_values('orders',ascending=False)
         fig = px.bar(city_stats, x='city', y='orders', color='surge', color_continuous_scale='RdYlGn_r',
-                     title='🏙️ Orders by City (colored by surge rate)')
+                     title=' Orders by City (colored by surge rate)')
         fig.update_layout(**CHART_LAYOUT)
         st.plotly_chart(fig, use_container_width=True)
 
     with c2:
         fig = px.scatter(city_stats, x='avg_del', y='avg_val', size='orders', color='city',
-                         color_discrete_sequence=COLORS, size_max=55, title='⏱️ Delivery Time vs Order Value')
+                         color_discrete_sequence=COLORS, size_max=55, title='⏱ Delivery Time vs Order Value')
         fig.update_layout(**CHART_LAYOUT)
         st.plotly_chart(fig, use_container_width=True)
 
     # City hourly patterns
     city_hourly = filt.groupby(['city','hour']).size().reset_index(name='orders')
     fig = px.line(city_hourly, x='hour', y='orders', color='city', color_discrete_sequence=COLORS,
-                  title='🕐 Hourly Patterns by City — Each City Has Its Own Rhythm')
+                  title=' Hourly Patterns by City — Each City Has Its Own Rhythm')
     fig.update_layout(**CHART_LAYOUT)
     st.plotly_chart(fig, use_container_width=True)
 
@@ -224,20 +224,20 @@ with tab2:
         wkend['type'] = wkend['is_weekend'].map({True:'Weekend',False:'Weekday'})
         fig = px.bar(wkend, x='city', y='orders', color='type', barmode='group',
                      color_discrete_map={'Weekday':'#0d9488','Weekend':'#f59e0b'},
-                     title='📊 Weekday vs Weekend Volume by City')
+                     title=' Weekday vs Weekend Volume by City')
         fig.update_layout(**CHART_LAYOUT)
         st.plotly_chart(fig, use_container_width=True)
 
     # City-cuisine matrix
     city_cuisine = filt.groupby(['city','cuisine']).size().reset_index(name='orders')
     fig = px.treemap(city_cuisine, path=['city','cuisine'], values='orders',
-                     color='orders', color_continuous_scale='Viridis', title='🗺️ City × Cuisine Breakdown')
+                     color='orders', color_continuous_scale='Viridis', title=' City × Cuisine Breakdown')
     fig.update_layout(**CHART_LAYOUT)
     st.plotly_chart(fig, use_container_width=True)
 
 # ═══════════ TAB 3: FORECAST ═══════════
 with tab3:
-    st.subheader("🔮 7-Day Demand Forecast")
+    st.subheader(" 7-Day Demand Forecast")
     st.markdown("*Holt-Winters exponential smoothing with weekly seasonality — interpretable, fast, honest.*")
 
     fc1, fc2 = st.columns([1,3])
@@ -264,7 +264,7 @@ with tab3:
                                           line=dict(width=0), showlegend=False))
                 fig.add_trace(go.Scatter(x=fc.index, y=np.maximum(fc.values-ci,0), name='Lower 95% CI',
                                           line=dict(width=0), fill='tonexty', fillcolor='rgba(251,146,60,0.15)', showlegend=False))
-                fig.update_layout(**CHART_LAYOUT, title=f'📈 7-Day Forecast — {forecast_city}')
+                fig.update_layout(**CHART_LAYOUT, title=f' 7-Day Forecast — {forecast_city}')
                 st.plotly_chart(fig, use_container_width=True)
 
                 fc_df = pd.DataFrame({'Date':fc.index.strftime('%Y-%m-%d'),'Predicted Orders':fc.values.round(0).astype(int),
@@ -309,7 +309,7 @@ with tab4:
 
     st.markdown(f"""
     <div class="rec-card">
-    <h4>🎯 Recommendation 1: Narrow Surge Windows by City</h4>
+    <h4> Recommendation 1: Narrow Surge Windows by City</h4>
     <p><b>The Data:</b> Of {total_surge_orders:,} surged orders, <b>{off_peak_pct:.0%} ({off_peak_surge:,} orders)</b> had surge 
     applied during non-peak hours (outside 12–14h lunch and 19–22h dinner). We're paying riders extra when demand doesn't require it.</p>
     <p><b>Action:</b> Replace the blanket surge rule with city-specific peak windows. Delhi's lunch peak is 12–13h; 
@@ -323,7 +323,7 @@ with tab4:
 
     st.markdown(f"""
     <div class="rec-card">
-    <h4>📊 Recommendation 2: Weekend-Aware Incentive Tiers</h4>
+    <h4> Recommendation 2: Weekend-Aware Incentive Tiers</h4>
     <p><b>The Data:</b> Weekends average <b>{weekend_per_day:.0f} orders/day</b> vs weekdays at <b>{weekday_per_day:.0f} orders/day</b> 
     — a <b>{weekend_lift:.0%} lift</b>. Yet surge rates are nearly identical across both. 
     Tuesday 3 PM gets the same incentive as Saturday 8 PM.</p>
@@ -338,7 +338,7 @@ with tab4:
 
     st.markdown("""
     <div class="rec-card">
-    <h4>🏙️ Recommendation 3: Pre-Position Riders in Tier-2 Cities</h4>
+    <h4> Recommendation 3: Pre-Position Riders in Tier-2 Cities</h4>
     <p><b>The Data:</b> Kolkata and Pune show <b>spikier</b> demand curves — orders concentrate in tight 2-hour windows 
     vs the broader 4–5 hour spreads in Delhi/Mumbai. Reactive surge pricing kicks in too late for these sharp spikes.</p>
     <p><b>Action:</b> Use the forecast model to pre-position riders 30 minutes before predicted peak onset in Tier-2 cities. 
@@ -351,7 +351,7 @@ with tab4:
     """, unsafe_allow_html=True)
 
     st.markdown("---")
-    st.markdown("### 🧪 Suggested A/B Test for Recommendation 1")
+    st.markdown("###  Suggested A/B Test for Recommendation 1")
     st.markdown("""
     - **Control (50% of Delhi riders):** Current blanket surge policy
     - **Treatment (50% of Delhi riders):** City-specific peak-only surge windows
@@ -363,12 +363,12 @@ with tab4:
 
 # ═══════════ TAB 5: EXEC SUMMARY ═══════════
 with tab5:
-    st.subheader("📋 One-Page Executive Summary")
+    st.subheader(" One-Page Executive Summary")
     st.markdown("*Written for the Ops Head — not for engineers.*")
 
     st.markdown(f"""
     <div class="exec-box">
-    <h4>📊 The Situation</h4>
+    <h4> The Situation</h4>
     <p>We analyzed <b>{len(df):,} orders</b> across <b>7 cities</b> over <b>90 days</b> (Jan–Mar 2025). 
     The company is spending on surge incentives for <b>{df['surge_applied'].mean():.0%} of all orders</b>, 
     but our analysis shows the real peak demand windows are narrower than the current surge rules assume.</p>
@@ -377,7 +377,7 @@ with tab5:
 
     st.markdown(f"""
     <div class="exec-box">
-    <h4>🔍 Key Findings</h4>
+    <h4> Key Findings</h4>
     <ol>
     <li><b>Peak demand is city-specific.</b> Delhi peaks at lunch (12–13h), Mumbai peaks at dinner (20–22h). A blanket rule wastes incentives.</li>
     <li><b>~{off_peak_pct:.0%} of surge is wasted.</b> Applied during hours when demand is moderate — riders get paid extra for no reason.</li>
@@ -389,7 +389,7 @@ with tab5:
 
     st.markdown("""
     <div class="exec-box">
-    <h4>✅ 3 Recommendations & Expected Impact</h4>
+    <h4> 3 Recommendations & Expected Impact</h4>
     <table style="width:100%;color:#cbd5e1;border-collapse:collapse">
     <tr style="border-bottom:1px solid rgba(255,255,255,0.1)"><th style="text-align:left;padding:8px">Action</th><th>Expected Saving</th><th>Effort</th><th>Timeline</th></tr>
     <tr style="border-bottom:1px solid rgba(255,255,255,0.05)"><td style="padding:8px">1. City-specific surge windows</td><td>₹2.5–4L/month</td><td>Low</td><td>1 week</td></tr>
